@@ -84,20 +84,31 @@ html {
 }
 
 .img-redonda {
-    width: 300px;
+    --s: 300px;   /* the size of the image */
+    --b: 8px;     /* the border thickness*/
+    --g: 14px;    /* the gap */
+    --c: #4ECDC4; /* the color */
+    
+    width: var(--s);
     height: 300px;
-    border-radius: 160px;
-    border: 10px solid rgb(6, 185, 250);
-    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
-    margin: auto;
-    display: block;
+    aspect-ratio: 1;
+    outline: calc(var(--s)/2) solid #0009;
+    outline-offset: calc(var(--s)/-2);
+    cursor: pointer;
+    transition: .3s;
+    border-radius: 50%;
 }
 
 .img-redonda:hover {
-    border: 10px solid rgb(241, 12, 8);
-    transition: all 2.5s;
+    outline: var(--b) solid var(--c);
+    outline-offset: var(--g);
+    color: red;
+    border-radius: 50%;
 }
 
+.img-redonda + .img-redonda {
+    border-radius: 50%;
+}
 .contenedor-img {
     display: flex;
     margin: auto;
