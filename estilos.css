@@ -6,6 +6,7 @@
     font-family: 'Urbanist', sans-serif;
     margin: 0;
     padding: 0;
+    text-decoration: none;
 
 }
 
@@ -776,6 +777,7 @@ html {
 .portfolio .galeria .proyecto:hover {
     transform: scale(1.1);
     border-radius: 5px;
+    transition: all 2s;
 }
 
 .portfolio .galeria .proyecto .overley {
