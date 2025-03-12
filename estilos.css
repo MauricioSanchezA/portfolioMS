@@ -84,6 +84,13 @@ html {
 
 }
 
+/* Efecto hover (al pasar el mouse) */
+.nav-responsive:hover {
+    background-color: white;  /* Fondo blanco */
+    color: rgb(6, 118, 158);  /* Letras azules */
+}
+
+
 .img-redonda {
     --s: 300px;   /* the size of the image */
     --b: 8px;     /* the border thickness*/
@@ -263,12 +270,31 @@ html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: 0.3s all;
+    transition: all 0.2s ease-in-out;  /* Agregar una transición suave */
 }
 
 .sobremi .fila .col .contenedor-intereses .intereses:hover {
+    animation: vibrar 0.3s ease-in-out infinite;  /* Aplicar la animación de vibración */
     background-color: rgb(6, 185, 250);
-    transform: rotateZ(-5deg);
+}
+
+/* Definición de la animación */
+@keyframes vibrar {
+    0% {
+        transform: rotateZ(-5deg);
+    }
+    25% {
+        transform: rotateZ(5deg);
+    }
+    50% {
+        transform: rotateZ(-5deg);
+    }
+    75% {
+        transform: rotateZ(5deg);
+    }
+    100% {
+        transform: rotateZ(-5deg);
+    }
 }
 
 .sobremi .fila .col .contenedor-intereses .intereses i {
