@@ -1,1054 +1,668 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mauricio Sánchez Abella – Software Developer Portfolio. HTML, CSS, JavaScript, PHP, React, Angular.">
-  <meta name="robots" content="index,follow">
-  <title>Mauricio Sánchez · Developer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    /* ===========================
-       RESET & TOKENS
-    =========================== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:        #0D0D14;
-      --bg2:       #13131E;
-      --bg3:       #1A1A2E;
-      --border:    rgba(255,255,255,.08);
-      --accent:    #6C63FF;
-      --accent2:   #FF6584;
-      --green:     #43E97B;
-      --yellow:    #FFD166;
-      --text:      #E8E8F0;
-      --muted:     #7B7B9E;
-      --white:     #FFFFFF;
-      --radius:    14px;
-      --shadow:    0 8px 40px rgba(0,0,0,.4);
-      --ff-head:   'Syne', sans-serif;
-      --ff-body:   'DM Sans', sans-serif;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: var(--ff-body);
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-      line-height: 1.6;
-    }
-
-    a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
-    ul { list-style: none; }
-
-    /* ===========================
-       NOISE TEXTURE OVERLAY
-    =========================== */
-    body::before {
-      content: '';
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      opacity: .4;
-    }
-
-    /* ===========================
-       PROGRESS BAR
-    =========================== */
-    #progress-bar {
-      position: fixed; top: 0; left: 0; height: 3px; z-index: 9999;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      width: 0%; transition: width .1s linear;
-    }
-
-    /* ===========================
-       NAVBAR
-    =========================== */
-    .navbar {
-      position: fixed; top: 3px; left: 0; right: 0; z-index: 1000;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 6%; height: 66px;
-      background: rgba(13,13,20,.85);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .logo {
-      font-family: var(--ff-head);
-      font-size: 1.3rem; font-weight: 800;
-      letter-spacing: -.02em;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-
-    .nav-links {
-      display: flex; gap: 2rem;
-    }
-    .nav-links a {
-      font-size: .88rem; font-weight: 500;
-      color: var(--muted);
-      transition: color .2s;
-      position: relative;
-    }
-    .nav-links a::after {
-      content: ''; position: absolute; bottom: -4px; left: 0;
-      width: 0; height: 2px;
-      background: var(--accent);
-      transition: width .3s;
-      border-radius: 2px;
-    }
-    .nav-links a:hover { color: var(--white); }
-    .nav-links a:hover::after { width: 100%; }
-
-    .nav-cta {
-      background: var(--accent); color: var(--white) !important;
-      padding: .45rem 1.2rem; border-radius: 50px;
-      font-weight: 600; font-size: .85rem;
-      transition: opacity .2s, transform .2s;
-    }
-    .nav-cta::after { display: none !important; }
-    .nav-cta:hover { opacity: .85; transform: scale(1.05); }
-
-    .hamburger {
-      display: none; flex-direction: column; gap: 5px; cursor: pointer;
-    }
-    .hamburger span {
-      display: block; width: 24px; height: 2px;
-      background: var(--text); border-radius: 2px; transition: .3s;
-    }
-
-    /* ===========================
-       HERO
-    =========================== */
-    .hero {
-      min-height: 100vh;
-      display: flex; align-items: center;
-      padding: 0 6%;
-      position: relative; overflow: hidden;
-    }
-
-    /* Gradient orbs */
-    .hero::before {
-      content: '';
-      position: absolute; width: 600px; height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(108,99,255,.18) 0%, transparent 70%);
-      top: -200px; right: -150px; pointer-events: none;
-    }
-    .hero::after {
-      content: '';
-      position: absolute; width: 400px; height: 400px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,101,132,.12) 0%, transparent 70%);
-      bottom: -100px; left: -100px; pointer-events: none;
-    }
-
-    .hero-inner {
-      max-width: 1100px; margin: 0 auto; width: 100%;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
-      align-items: center; padding-top: 66px;
-    }
-
-    .hero-chip {
-      display: inline-flex; align-items: center; gap: .5rem;
-      background: rgba(108,99,255,.15);
-      border: 1px solid rgba(108,99,255,.3);
-      color: #A89DFF; font-size: .78rem; font-weight: 600;
-      padding: .3rem .9rem; border-radius: 50px;
-      margin-bottom: 1.2rem; letter-spacing: .06em; text-transform: uppercase;
-    }
-    .chip-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #6C63FF;
-      animation: blink 1.5s ease-in-out infinite;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-    .hero h1 {
-      font-family: var(--ff-head);
-      font-size: clamp(2.4rem, 4.5vw, 3.8rem);
-      font-weight: 800; line-height: 1.1;
-      letter-spacing: -.03em;
-      margin-bottom: 1rem;
-    }
-    .hero h1 span {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-
-    .hero-role {
-      font-size: 1.1rem; font-weight: 500;
-      color: var(--muted); margin-bottom: 1rem;
-    }
-
-    .hero p {
-      font-size: .97rem; color: var(--muted);
-      line-height: 1.8; margin-bottom: 2rem;
-      max-width: 420px;
-    }
-
-    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), #9B59B6);
-      color: var(--white); font-family: var(--ff-body);
-      font-weight: 600; font-size: .95rem;
-      padding: .8rem 2rem; border-radius: 50px; border: none;
-      cursor: pointer; transition: transform .2s, box-shadow .2s;
-      box-shadow: 0 4px 24px rgba(108,99,255,.35);
-    }
-    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(108,99,255,.5); }
-
-    .btn-outline {
-      background: transparent; color: var(--text);
-      font-family: var(--ff-body); font-weight: 600; font-size: .95rem;
-      padding: .78rem 1.8rem; border-radius: 50px;
-      border: 1px solid var(--border);
-      cursor: pointer; transition: border-color .2s, color .2s;
-    }
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-
-    .hero-social {
-      display: flex; gap: .75rem; margin-top: 2rem;
-    }
-    .hero-social a {
-      width: 40px; height: 40px; border-radius: 10px;
-      border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--muted); font-size: .95rem;
-      transition: border-color .2s, color .2s, background .2s;
-    }
-    .hero-social a:hover { border-color: var(--accent); color: var(--accent); background: rgba(108,99,255,.1); }
-
-    /* Photo side */
-    .hero-photo {
-      position: relative; display: flex; justify-content: center;
-    }
-    .photo-frame {
-      width: min(360px, 85vw); height: min(360px, 85vw);
-      border-radius: 40% 60% 55% 45% / 50% 45% 55% 50%;
-      overflow: hidden;
-      border: 2px solid rgba(108,99,255,.3);
-      box-shadow: 0 0 80px rgba(108,99,255,.25);
-      animation: morph 8s ease-in-out infinite;
-    }
-    @keyframes morph {
-      0%,100%{ border-radius:40% 60% 55% 45%/50% 45% 55% 50% }
-      33%    { border-radius:55% 45% 40% 60%/40% 60% 50% 50% }
-      66%    { border-radius:45% 55% 60% 40%/60% 35% 65% 40% }
-    }
-    .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
-
-    .hero-stat {
-      position: absolute;
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 14px; padding: .7rem 1.1rem;
-      box-shadow: var(--shadow);
-    }
-    .hero-stat span { font-family: var(--ff-head); font-size: 1.3rem; font-weight: 800; }
-    .hero-stat p { font-size: .72rem; color: var(--muted); }
-    .stat-1 { bottom: 20px; left: -10px; }
-    .stat-1 span { color: var(--green); }
-    .stat-2 { top: 20px; right: -10px; }
-    .stat-2 span { color: var(--accent); }
-
-    /* ===========================
-       SECTION SHARED
-    =========================== */
-    section { padding: 90px 6%; position: relative; z-index: 1; }
-
-    .sec-label {
-      font-size: .73rem; font-weight: 700; letter-spacing: .14em;
-      text-transform: uppercase; color: var(--accent);
-      margin-bottom: .5rem; display: block;
-    }
-    .sec-title {
-      font-family: var(--ff-head);
-      font-size: clamp(1.8rem, 3vw, 2.4rem);
-      font-weight: 800; letter-spacing: -.02em;
-      margin-bottom: .6rem;
-    }
-    .sec-sub { color: var(--muted); font-size: .95rem; max-width: 520px; }
-    .sec-head { margin-bottom: 3rem; }
-
-    .inner { max-width: 1100px; margin: 0 auto; }
-
-    /* ===========================
-       ABOUT
-    =========================== */
-    .about { background: var(--bg2); }
-    .about-grid {
-      display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: start;
-    }
-
-    .about-photo {
-      border-radius: 24px; overflow: hidden;
-      border: 1px solid var(--border);
-      position: relative;
-    }
-    .about-photo img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
-    .about-photo-badge {
-      position: absolute; bottom: 16px; left: 16px;
-      background: rgba(13,13,20,.9);
-      border: 1px solid var(--border);
-      border-radius: 12px; padding: .6rem 1rem;
-      font-size: .8rem; color: var(--green); font-weight: 600;
-      backdrop-filter: blur(8px);
-    }
-
-    .about-info p { color: var(--muted); font-size: .95rem; line-height: 1.8; margin-bottom: 1.5rem; }
-
-    .info-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.5rem;
-    }
-    .info-item {
-      background: var(--bg3); border: 1px solid var(--border);
-      border-radius: 12px; padding: .8rem 1rem;
-    }
-    .info-item label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
-    .info-item p { font-weight: 600; font-size: .9rem; margin-top: .15rem; }
-
-    /* Tech tags */
-    .tech-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.5rem; }
-    .tag {
-      display: inline-flex; align-items: center; gap: .4rem;
-      background: rgba(108,99,255,.1);
-      border: 1px solid rgba(108,99,255,.2);
-      color: #A89DFF; font-size: .78rem; font-weight: 600;
-      padding: .3rem .75rem; border-radius: 6px;
-      transition: background .2s;
-    }
-    .tag:hover { background: rgba(108,99,255,.22); }
-
-    /* ===========================
-       SKILLS
-    =========================== */
-    .skills-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
-    }
-    .skills-col h3 {
-      font-family: var(--ff-head); font-size: 1.1rem; font-weight: 700;
-      margin-bottom: 1.5rem; color: var(--text);
-    }
-
-    .skill-item { margin-bottom: 1.3rem; }
-    .skill-header {
-      display: flex; justify-content: space-between;
-      font-size: .85rem; font-weight: 600; margin-bottom: .4rem;
-    }
-    .skill-header span:last-child { color: var(--accent); }
-    .skill-bar {
-      height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden;
-    }
-    .skill-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 3px; width: 0%;
-      transition: width 1.2s cubic-bezier(.25,.8,.25,1);
-    }
-
-    /* ===========================
-       DIPLOMAS
-    =========================== */
-    .diplomas { background: var(--bg2); }
-    .diplomas-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-    .diploma-card {
-      background: var(--bg3); border: 1px solid var(--border);
-      border-radius: var(--radius); overflow: hidden;
-      transition: transform .3s, border-color .3s;
-    }
-    .diploma-card:hover { transform: translateY(-5px); border-color: rgba(108,99,255,.4); }
-    .diploma-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
-    .diploma-card-body { padding: .6rem .8rem; }
-    .diploma-card-body p { font-size: .78rem; color: var(--muted); font-weight: 600; }
-
-    /* ===========================
-       CURRICULUM TIMELINE
-    =========================== */
-    .curriculum-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
-    }
-    .timeline h3 {
-      font-family: var(--ff-head); font-size: 1.05rem; font-weight: 700;
-      margin-bottom: 1.8rem; color: var(--accent);
-      display: flex; align-items: center; gap: .5rem;
-    }
-
-    .timeline-item {
-      position: relative; padding-left: 1.8rem; padding-bottom: 2rem;
-      border-left: 1px solid var(--border);
-    }
-    .timeline-item:last-child { border-left-color: transparent; padding-bottom: 0; }
-    .timeline-item::before {
-      content: '';
-      position: absolute; left: -5px; top: 4px;
-      width: 9px; height: 9px; border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 3px rgba(108,99,255,.2);
-    }
-    .timeline-item h4 { font-family: var(--ff-head); font-size: 1rem; margin-bottom: .2rem; }
-    .timeline-org {
-      font-size: .78rem; font-weight: 700; color: var(--accent);
-      margin-bottom: .2rem; text-transform: uppercase; letter-spacing: .06em;
-    }
-    .timeline-item p { font-size: .85rem; color: var(--muted); line-height: 1.7; }
-
-    /* ===========================
-       PORTFOLIO
-    =========================== */
-    .portfolio-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;
-    }
-    .port-card {
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: var(--radius); overflow: hidden;
-      transition: transform .3s, box-shadow .3s, border-color .3s;
-    }
-    .port-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(108,99,255,.2); border-color: rgba(108,99,255,.4); }
-    .port-img { position: relative; overflow: hidden; }
-    .port-img img { width: 100%; height: 200px; object-fit: cover; transition: transform .5s; }
-    .port-card:hover .port-img img { transform: scale(1.06); }
-    .port-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(13,13,20,.9) 0%, transparent 60%);
-      display: flex; align-items: flex-end; padding: 1.2rem;
-      opacity: 0; transition: opacity .3s;
-    }
-    .port-card:hover .port-overlay { opacity: 1; }
-    .port-overlay a {
-      display: inline-flex; align-items: center; gap: .4rem;
-      background: var(--accent); color: var(--white);
-      padding: .5rem 1.1rem; border-radius: 50px;
-      font-size: .82rem; font-weight: 600;
-    }
-    .port-body { padding: 1.2rem; }
-    .port-body h3 { font-family: var(--ff-head); font-size: 1.05rem; margin-bottom: .3rem; }
-    .port-body p { font-size: .82rem; color: var(--muted); }
-    .port-badge {
-      display: inline-block;
-      background: rgba(108,99,255,.15); color: #A89DFF;
-      font-size: .72rem; font-weight: 700; padding: .2rem .65rem;
-      border-radius: 4px; margin-top: .5rem;
-    }
-
-    /* ===========================
-       CONTACT
-    =========================== */
-    .contact { background: var(--bg2); }
-    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
-
-    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .form-group { display: flex; flex-direction: column; gap: .4rem; }
-    .form-group label { font-size: .8rem; font-weight: 600; color: var(--muted); }
-    .form-group input,
-    .form-group textarea {
-      background: var(--bg3); border: 1px solid var(--border);
-      border-radius: 10px; padding: .75rem 1rem;
-      color: var(--text); font-family: var(--ff-body); font-size: .9rem;
-      transition: border-color .2s;
-      outline: none;
-    }
-    .form-group input::placeholder,
-    .form-group textarea::placeholder { color: var(--muted); }
-    .form-group input:focus,
-    .form-group textarea:focus { border-color: var(--accent); }
-    .form-group textarea { resize: vertical; min-height: 130px; }
-
-    .contact-side h3 {
-      font-family: var(--ff-head); font-size: 1.4rem; margin-bottom: 1.2rem;
-    }
-    .contact-card {
-      background: var(--bg3); border: 1px solid var(--border);
-      border-radius: 14px; padding: 1rem 1.2rem;
-      display: flex; align-items: center; gap: 1rem;
-      margin-bottom: .75rem;
-    }
-    .cc-icon {
-      width: 42px; height: 42px; border-radius: 10px;
-      background: rgba(108,99,255,.15);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--accent); font-size: 1rem; flex-shrink: 0;
-    }
-    .cc-icon.green { background: rgba(67,233,123,.12); color: var(--green); }
-    .cc-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-    .cc-val { font-weight: 600; font-size: .9rem; }
-
-    .social-row { display: flex; gap: .75rem; margin-top: 1.5rem; }
-    .soc-btn {
-      display: flex; align-items: center; gap: .5rem;
-      padding: .55rem 1.1rem; border-radius: 50px;
-      font-weight: 600; font-size: .82rem;
-      border: 1px solid var(--border);
-      transition: background .2s, border-color .2s, color .2s;
-    }
-    .soc-btn:hover { border-color: var(--accent); background: rgba(108,99,255,.1); color: var(--accent); }
-
-    /* ===========================
-       FOOTER
-    =========================== */
-    footer {
-      background: var(--bg); border-top: 1px solid var(--border);
-      padding: 2.5rem 6%;
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 1rem;
-    }
-    .footer-brand {
-      font-family: var(--ff-head); font-size: 1.1rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .footer-copy { font-size: .82rem; color: var(--muted); }
-    .back-top {
-      width: 40px; height: 40px; border-radius: 10px;
-      background: var(--bg3); border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--muted); transition: color .2s, border-color .2s;
-    }
-    .back-top:hover { color: var(--accent); border-color: var(--accent); }
-
-    /* ===========================
-       REVEAL ANIMATION
-    =========================== */
-    .reveal {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity .65s ease, transform .65s ease;
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    /* ===========================
-       MOBILE MENU
-    =========================== */
-    @media (max-width: 900px) {
-      .nav-links {
-        position: fixed; top: 69px; left: 0; right: 0;
-        background: rgba(13,13,20,.97);
-        flex-direction: column; gap: 0;
-        max-height: 0; overflow: hidden;
-        transition: max-height .35s ease;
-        border-bottom: 1px solid var(--border);
-      }
-      .nav-links.open { max-height: 500px; }
-      .nav-links li { border-top: 1px solid var(--border); }
-      .nav-links a { display: block; padding: .9rem 6%; }
-      .hamburger { display: flex; }
-    }
-
-    /* ===========================
-       RESPONSIVE
-    =========================== */
-    @media (max-width: 900px) {
-      .hero-inner { grid-template-columns: 1fr; text-align: center; padding-top: 66px; }
-      .hero p { margin: 0 auto 2rem; }
-      .hero-btns { justify-content: center; }
-      .hero-social { justify-content: center; }
-      .hero-photo { order: -1; }
-      .stat-1 { bottom: 10px; left: 0; }
-      .stat-2 { top: 10px; right: 0; }
-      .about-grid { grid-template-columns: 1fr; }
-      .skills-grid { grid-template-columns: 1fr; }
-      .curriculum-grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; }
-      footer { justify-content: center; text-align: center; }
-    }
-
-    @media (max-width: 600px) {
-      section { padding: 60px 5%; }
-      .form-row { grid-template-columns: 1fr; }
-      .info-grid { grid-template-columns: 1fr; }
-      .portfolio-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Descripcion" content="Curriculum vitae Desarrollador de Software">
+    <meta name="robots" content="index,follow">
+    <title>Portfolio</title>
+    <link rel="Stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+
 <body>
 
-<!-- Progress -->
-<div id="progress-bar"></div>
+    <!--M E N U-->
+    <div class="contenedor-header">
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <div class="logo">MS.</div>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#about">About</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#curriculum">Curriculum</a></li>
-    <li><a href="#portfolio">Portfolio</a></li>
-    <li><a href="#contact" class="nav-cta">Contact</a></li>
-  </ul>
-  <div class="hamburger" id="hamburger">
-    <span></span><span></span><span></span>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="inicio">
-  <div class="hero-inner">
-    <div class="reveal">
-      <div class="hero-chip">
-        <div class="chip-dot"></div>
-        Available for work
-      </div>
-      <h1>Hi, I'm <span>Mauricio<br>Sánchez</span></h1>
-      <p class="hero-role">Software Developer · Pereira, Colombia</p>
-      <p>I build clean, functional and beautiful web experiences. Passionate about HTML, CSS, JavaScript, PHP and modern frameworks.</p>
-      <div class="hero-btns">
-        <a href="#portfolio" class="btn-primary">View my work</a>
-        <a href="docs/2024_06_HV_mauricio sanchez.pdf" download class="btn-outline">
-          <i class="fas fa-download" style="font-size:.8rem;margin-right:.4rem"></i>Download CV
-        </a>
-      </div>
-      <div class="hero-social">
-        <a href="https://www.facebook.com/mauricio.s.abella" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://github.com/MauricioSanchezA" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
-        <a href="https://www.linkedin.com/in/mauricio-sanchez-abella-1bbb41278" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a href="https://wa.me/573135134594" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-      </div>
-    </div>
-    <div class="hero-photo reveal">
-      <div class="photo-frame">
-        <img src="img/foto_6.jpeg" alt="Mauricio Sánchez Abella">
-      </div>
-      <div class="hero-stat stat-1">
-        <span>6+</span>
-        <p>Projects built</p>
-      </div>
-      <div class="hero-stat stat-2">
-        <span>2+</span>
-        <p>Years coding</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about" class="about">
-  <div class="inner">
-    <div class="sec-head reveal">
-      <span class="sec-label">Who I am</span>
-      <h2 class="sec-title">About me</h2>
-    </div>
-    <div class="about-grid">
-      <div class="about-photo reveal">
-        <img src="img/foto_6.jpeg" alt="Mauricio Sánchez">
-        <div class="about-photo-badge">✦ Developer Junior</div>
-      </div>
-      <div class="reveal">
-        <p>Hi! I'm <strong style="color:var(--white)">Mauricio Sánchez Abella</strong>, a software developer from Pereira, Colombia. I enjoy cinema, music, and visiting beautiful landscapes. I work and study simultaneously, driven by a genuine passion for programming.</p>
-
-        <div class="info-grid">
-          <div class="info-item"><label>City</label><p>Pereira, Colombia</p></div>
-          <div class="info-item"><label>Phone</label><p>+57 (313) 513-4594</p></div>
-          <div class="info-item"><label>Email</label><p style="font-size:.82rem">samauricio71@gmail.com</p></div>
-          <div class="info-item"><label>Role</label><p>Developer Junior</p></div>
+        <!-- B A R R A   D E   P R O G R E S O -->
+        <div class="progress-bar">
+            <div id="progress" class="progress"></div>
         </div>
 
-        <div class="tech-tags">
-          <span class="tag"><i class="fab fa-html5"></i> HTML5</span>
-          <span class="tag"><i class="fab fa-css3-alt"></i> CSS3</span>
-          <span class="tag"><i class="fab fa-square-js"></i> JavaScript</span>
-          <span class="tag"><i class="fab fa-php"></i> PHP</span>
-          <span class="tag"><i class="fab fa-react"></i> React</span>
-          <span class="tag"><i class="fab fa-angular"></i> Angular</span>
-          <span class="tag"><i class="fab fa-vuejs"></i> Vue.js</span>
-          <span class="tag"><i class="fab fa-python"></i> Python</span>
-          <span class="tag"><i class="fab fa-node"></i> Node.js</span>
-          <span class="tag"><i class="fab fa-bootstrap"></i> Bootstrap</span>
-          <span class="tag"><i class="fab fa-laravel"></i> Laravel</span>
-          <span class="tag"><i class="fab fa-github"></i> GitHub</span>
-          <span class="tag"><i class="fas fa-database"></i> SQL</span>
-          <span class="tag"><i class="fab fa-mdb"></i> MongoDB</span>
-        </div>
-
-        <a href="docs/2024_06_HV_mauricio sanchez.pdf" download class="btn-primary" style="display:inline-flex;align-items:center;gap:.5rem">
-          <i class="fas fa-download"></i> Download CV
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SKILLS -->
-<section id="skills">
-  <div class="inner">
-    <div class="sec-head reveal">
-      <span class="sec-label">What I know</span>
-      <h2 class="sec-title">Skills</h2>
-      <p class="sec-sub">A mix of technical expertise and professional soft skills built through real work experience.</p>
-    </div>
-    <div class="skills-grid">
-      <div class="reveal">
-        <h3>Technical Skills</h3>
-        <div class="skill-item" data-pct="89">
-          <div class="skill-header"><span>HTML &amp; CSS</span><span>89%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:89%"></div></div>
-        </div>
-        <div class="skill-item" data-pct="85">
-          <div class="skill-header"><span>PHP</span><span>85%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:85%"></div></div>
-        </div>
-        <div class="skill-item" data-pct="75">
-          <div class="skill-header"><span>JavaScript</span><span>75%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:75%"></div></div>
-        </div>
-        <div class="skill-item" data-pct="70">
-          <div class="skill-header"><span>React</span><span>70%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:70%"></div></div>
-        </div>
-        <div class="skill-item" data-pct="68">
-          <div class="skill-header"><span>Python</span><span>68%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:68%"></div></div>
-        </div>
-        <div class="skill-item" data-pct="65">
-          <div class="skill-header"><span>Angular</span><span>65%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:65%"></div></div>
-        </div>
-        <div class="skill-item" data-pct="51">
-          <div class="skill-header"><span>MongoDB</span><span>51%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:51%"></div></div>
-        </div>
-      </div>
-      <div class="reveal">
-        <h3>Professional Skills</h3>
-        <div class="skill-item">
-          <div class="skill-header"><span>Responsibility</span><span>96%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:96%"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-header"><span>Discipline</span><span>95%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:95%"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-header"><span>TeamWork</span><span>95%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:95%"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-header"><span>Dedication</span><span>95%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:95%"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-header"><span>Leadership</span><span>91%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:91%"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-header"><span>Communication</span><span>85%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:85%"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-header"><span>Creativity</span><span>85%</span></div>
-          <div class="skill-bar"><div class="skill-fill" style="--w:85%"></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- DIPLOMAS -->
-<section class="diplomas" id="diplomas">
-  <div class="inner">
-    <div class="sec-head reveal">
-      <span class="sec-label">Certifications</span>
-      <h2 class="sec-title">Diplomas of Study</h2>
-      <p class="sec-sub">Academic and professional certifications from UTP, Oracle, Alura LATAM and SENA.</p>
-    </div>
-    <div class="diplomas-grid">
-      <div class="diploma-card reveal"><img src="img/certificacion_3.png" alt="UTP"><div class="diploma-card-body"><p>UTP</p></div></div>
-      <div class="diploma-card reveal"><img src="img/programacion_SQL.png" alt="Oracle SQL"><div class="diploma-card-body"><p>Oracle – SQL</p></div></div>
-      <div class="diploma-card reveal"><img src="img/fundamentos_bases.png" alt="Oracle DB"><div class="diploma-card-body"><p>Oracle – DB Fundamentos</p></div></div>
-      <div class="diploma-card reveal"><img src="img/certificacion_1.png" alt="Alura Oracle"><div class="diploma-card-body"><p>Alura LATAM Oracle</p></div></div>
-      <div class="diploma-card reveal"><img src="img/certificacion_2.png" alt="Alura Oracle 2"><div class="diploma-card-body"><p>Alura LATAM Oracle</p></div></div>
-      <div class="diploma-card reveal"><img src="img/certificacion_4.jpg" alt="Alura Oracle 3"><div class="diploma-card-body"><p>Alura LATAM Oracle</p></div></div>
-      <div class="diploma-card reveal"><img src="img/certificacion_6.png" alt="Alura Oracle 4"><div class="diploma-card-body"><p>Alura LATAM Oracle</p></div></div>
-      <div class="diploma-card reveal"><img src="img/certificacion_5.png" alt="Alura Oracle 5"><div class="diploma-card-body"><p>Alura LATAM Oracle</p></div></div>
-      <div class="diploma-card reveal"><img src="img/HABILIDAD_DIG.png" alt="SENA"><div class="diploma-card-body"><p>SENA</p></div></div>
-      <div class="diploma-card reveal"><img src="img/MAQUETACION_1.png" alt="SENA Maquetacion"><div class="diploma-card-body"><p>SENA – Maquetación</p></div></div>
-      <div class="diploma-card reveal"><img src="img/comunicacion.png" alt="SENA Comunicacion"><div class="diploma-card-body"><p>SENA – Comunicación</p></div></div>
-      <div class="diploma-card reveal"><img src="img/BBDD_GENERALIDADES.png" alt="SENA BD"><div class="diploma-card-body"><p>SENA – BD Generalidades</p></div></div>
-      <div class="diploma-card reveal"><img src="img/CONSTRUCCION_MYSQL.png" alt="SENA MySQL"><div class="diploma-card-body"><p>SENA – MySQL</p></div></div>
-      <div class="diploma-card reveal"><img src="img/tecnologo.jpg" alt="SENA Tecnologo"><div class="diploma-card-body"><p>SENA – Tecnólogo</p></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- CURRICULUM -->
-<section id="curriculum">
-  <div class="inner">
-    <div class="sec-head reveal">
-      <span class="sec-label">My journey</span>
-      <h2 class="sec-title">Curriculum</h2>
-      <p class="sec-sub">Education and work experience that shaped my skills as a developer.</p>
-    </div>
-    <div class="curriculum-grid">
-      <div class="timeline reveal">
-        <h3><i class="fas fa-graduation-cap"></i> Education</h3>
-        <div class="timeline-item">
-          <h4>Database Programming</h4>
-          <div class="timeline-org">Oracle Academy</div>
-          <p>Oracle DB administration, APEX tools, and database debugging.</p>
-        </div>
-        <div class="timeline-item">
-          <h4>Software Developer</h4>
-          <div class="timeline-org">SENA</div>
-          <p>Skills for creating computer applications, functional and technical requirements, individual and team methods.</p>
-        </div>
-        <div class="timeline-item">
-          <h4>Diploma – Web Application Development</h4>
-          <div class="timeline-org">Misión TIC2022 · UTP</div>
-          <p>Learning paths to enhance national digital talent and drive digital transformation in Colombia.</p>
-        </div>
-        <div class="timeline-item">
-          <h4>Diploma – Advanced Excel</h4>
-          <div class="timeline-org">Comfamiliar Risaralda</div>
-          <p>Pivot tables, dashboards, charts, formulas, and data solutions in Excel.</p>
-        </div>
-      </div>
-      <div class="timeline reveal">
-        <h3><i class="fas fa-briefcase"></i> Work Experience</h3>
-        <div class="timeline-item">
-          <h4>Developer</h4>
-          <div class="timeline-org">Cerok</div>
-          <p>Reports, queries and formats using MVC, PHP, JavaScript, HTML, CSS, Symphony, and SQL databases.</p>
-        </div>
-        <div class="timeline-item">
-          <h4>Freelance Developer</h4>
-          <div class="timeline-org">Pequeños Picassos</div>
-          <p>Designed the company's website using HTML, CSS and JavaScript for a children's art and entertainment brand.</p>
-        </div>
-        <div class="timeline-item">
-          <h4>Coordinator</h4>
-          <div class="timeline-org">Pereira Town Hall</div>
-          <p>Supported the Secretary of Sports and Recreation with administrative activities for sports venues.</p>
-        </div>
-        <div class="timeline-item">
-          <h4>Office Manager</h4>
-          <div class="timeline-org">CSC</div>
-          <p>Implemented work plans, oversaw credit policies, and visited companies to attract potential clients.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PORTFOLIO -->
-<section id="portfolio" style="background:var(--bg2)">
-  <div class="inner">
-    <div class="sec-head reveal">
-      <span class="sec-label">My work</span>
-      <h2 class="sec-title">Portfolio</h2>
-      <p class="sec-sub">A selection of projects I've built — websites, tools, and web applications.</p>
-    </div>
-    <div class="portfolio-grid">
-      <div class="port-card reveal">
-        <div class="port-img">
-          <img src="img/img_1.png" alt="Pequeños Picassos">
-          <div class="port-overlay">
-            <a href="https://mauriciosancheza.github.io/pequenosPicassos.github.io/" target="_blank" rel="noopener">
-              <i class="fas fa-external-link-alt"></i> Live Site
-            </a>
-          </div>
-        </div>
-        <div class="port-body">
-          <h3>Pequeños Picassos</h3>
-          <p>Landing page for a children's art and entertainment company in Pereira.</p>
-          <span class="port-badge">HTML · CSS · JS</span>
-        </div>
-      </div>
-      <div class="port-card reveal">
-        <div class="port-img">
-          <img src="img/encriptar_1.jpg" alt="Encriptador">
-          <div class="port-overlay">
-            <a href="https://mauriciosancheza.github.io/Decodificadortexto.github.io/" target="_blank" rel="noopener">
-              <i class="fas fa-external-link-alt"></i> Live Site
-            </a>
-          </div>
-        </div>
-        <div class="port-body">
-          <h3>Encriptador de Texto</h3>
-          <p>Text encryption and decryption web tool.</p>
-          <span class="port-badge">HTML · CSS · JS</span>
-        </div>
-      </div>
-      <div class="port-card reveal">
-        <div class="port-img">
-          <img src="img/Barberia_1.jpg" alt="BarberShop">
-          <div class="port-overlay">
-            <a href="https://mauriciosancheza.github.io/BarberShop.github.io/" target="_blank" rel="noopener">
-              <i class="fas fa-external-link-alt"></i> Live Site
-            </a>
-          </div>
-        </div>
-        <div class="port-body">
-          <h3>BarberShop</h3>
-          <p>Modern landing page for a barbershop business.</p>
-          <span class="port-badge">HTML · CSS · JS</span>
-        </div>
-      </div>
-      <div class="port-card reveal">
-        <div class="port-img">
-          <img src="img/recetario_1.jpg" alt="Recetario">
-          <div class="port-overlay">
-            <a href="https://mauriciosancheza.github.io/RecetarioALURAONE/" target="_blank" rel="noopener">
-              <i class="fas fa-external-link-alt"></i> Live Site
-            </a>
-          </div>
-        </div>
-        <div class="port-body">
-          <h3>Recetario</h3>
-          <p>Recipe book web application built for Alura ONE challenge.</p>
-          <span class="port-badge">HTML · CSS · JS</span>
-        </div>
-      </div>
-      <div class="port-card reveal">
-        <div class="port-img">
-          <img src="img/Escenario_1.jpg" alt="Escenarios Deportivos">
-          <div class="port-overlay">
-            <a href="https://mauriciosancheza.github.io/escenariosdeportivos/" target="_blank" rel="noopener">
-              <i class="fas fa-external-link-alt"></i> Live Site
-            </a>
-          </div>
-        </div>
-        <div class="port-body">
-          <h3>Escenarios Deportivos</h3>
-          <p>Sports venues website for the city of Pereira.</p>
-          <span class="port-badge">HTML · CSS · JS</span>
-        </div>
-      </div>
-      <div class="port-card reveal">
-        <div class="port-img">
-          <img src="img/Dietas.jpg" alt="Dietas HUSJ">
-          <div class="port-overlay">
-            <a href="https://msanchez.wuaze.com/?i=1" target="_blank" rel="noopener">
-              <i class="fas fa-external-link-alt"></i> Live Site
-            </a>
-          </div>
-        </div>
-        <div class="port-body">
-          <h3>Dietas Adicionales – HUSJ</h3>
-          <p>Hospital management tool for additional dietary tracking.</p>
-          <span class="port-badge">PHP · HTML · CSS</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="contact">
-  <div class="inner">
-    <div class="sec-head reveal">
-      <span class="sec-label">Get in touch</span>
-      <h2 class="sec-title">Contact me</h2>
-      <p class="sec-sub">Have a project in mind or just want to say hi? I'm always open to new opportunities.</p>
-    </div>
-    <div class="contact-grid">
-      <div class="reveal">
-        <form class="contact-form" id="contactForm">
-          <div class="form-row">
-            <div class="form-group">
-              <label>Name</label>
-              <input type="text" placeholder="Your name" required>
+        <!-- M E N U   E N C A B E Z A D O -->
+        <header>
+            <div class="logo">
+                <a href="#">Mauricio</a>
             </div>
-            <div class="form-group">
-              <label>Phone</label>
-              <input type="tel" placeholder="+57 ...">
+
+            <nav id="nav">
+                <ul>
+                    <li><a href="#inicio" onclick="seleccionar()">Start</a></li>
+                    <li><a href="#sobremi" onclick="seleccionar()">About me</a></li>
+                    <li><a href="#skills" onclick="seleccionar()">Skills</a></li>
+                    <li><a href="#curriculum" onclick="seleccionar()">Curriculum</a></li>
+                    <li><a href="#portfolio" onclick="seleccionar()">Portfolio</a></li>
+                    <li><a href="#contact" onclick="seleccionar()">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="nav-responsive" onclick="MostrarOcultarMenu()">
+                <i class="fa-solid fa-bars"></i>
             </div>
-          </div>
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" placeholder="your@email.com" required>
-          </div>
-          <div class="form-group">
-            <label>Subject</label>
-            <input type="text" placeholder="Project idea, collaboration...">
-          </div>
-          <div class="form-group">
-            <label>Message</label>
-            <textarea placeholder="Tell me about your project..."></textarea>
-          </div>
-          <button type="submit" class="btn-primary" style="width:fit-content">
-            <i class="fas fa-paper-plane" style="margin-right:.4rem"></i> Send Message
-          </button>
-        </form>
-      </div>
-      <div class="reveal">
-        <h3>Let's talk</h3>
-        <div class="contact-card">
-          <div class="cc-icon"><i class="fas fa-map-marker-alt"></i></div>
-          <div><div class="cc-label">Location</div><div class="cc-val">Pereira, Risaralda, Colombia</div></div>
-        </div>
-        <div class="contact-card">
-          <div class="cc-icon"><i class="fas fa-phone"></i></div>
-          <div><div class="cc-label">Phone</div><div class="cc-val">+57 (313) 513-4594</div></div>
-        </div>
-        <div class="contact-card">
-          <div class="cc-icon green"><i class="fas fa-envelope"></i></div>
-          <div><div class="cc-label">Email</div><div class="cc-val">samauricio71@gmail.com</div></div>
-        </div>
-        <div class="social-row">
-          <a href="https://github.com/MauricioSanchezA" target="_blank" class="soc-btn"><i class="fab fa-github"></i> GitHub</a>
-          <a href="https://www.linkedin.com/in/mauricio-sanchez-abella-1bbb41278" target="_blank" class="soc-btn"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
-          <a href="https://wa.me/573135134594" target="_blank" class="soc-btn" style="border-color:rgba(37,211,102,.3);color:var(--green)"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-        </div>
-      </div>
+        </header>
     </div>
-  </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-brand">MS.</div>
-  <p class="footer-copy">&copy; 2024 · Mauricio Sánchez Abella · Pereira, Colombia</p>
-  <a href="#inicio" class="back-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></a>
-</footer>
+    <!-- S T A R T -->
+    <section id="inicio" class="inicio">
+        <div class="contenido-banner">
+            <div class="contenedor-img">
+                <img src="img/foto_6.jpeg" class="img-redonda" alt="">
+            </div>
+            <h1>MAURICIO SANCHEZ ABELLA</h1>
+            <h2>Software Developer</h2>
+            <div class="redes">
+                <a href=https://www.facebook.com/mauricio.s.abella target="blank"><i
+                        class="fa-brands fa-facebook-f"></i></a>
+                <a href=https://github.com/MauricioSanchezA target="blank"><i class="fa-brands fa-github"></i></a>
+                <a href=https://www.linkedin.com/in/mauricio-sanchez-abella-1bbb41278?jobid=1234&lipi=urn%3Ali%3Apage%3Ad_jobs_easyapply_pdfgenresume%3BBTKnlcJmSoOaM8iNepxUBg%3D%3D&licu=urn%3Ali%3Acontrol%3Ad_jobs_easyapply_pdfgenresume-v02_profile target="blank"><i
+                        class="fa-brands fa-linkedin-in"></i></a>
+                <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
 
-<script>
-  // Progress bar
-  window.addEventListener('scroll', () => {
-    const s = document.documentElement;
-    document.getElementById('progress-bar').style.width =
-      (s.scrollTop / (s.scrollHeight - s.clientHeight) * 100) + '%';
-  });
+        </div>
+    </section>
 
-  // Hamburger
-  const ham = document.getElementById('hamburger');
-  const nav = document.getElementById('navLinks');
-  ham.addEventListener('click', () => nav.classList.toggle('open'));
-  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
+    <!-- A B O U T  M E -->
+    <section id="sobremi" class="sobremi">
+        <div class="contenido-seccion">
+            <h2>ABOUT ME</h2>
+            <p>Hi, i am <span>Mauricio Sanchez Abella, </span> I like the cinema, listening to music, visiting places
+                with beautiful landscapes, currently I work and study, with the aim of doing what I enjoy, programming.
+            </p>
+            <div class="fila">
+                <!-- DATOS PERSONALES-->
+                <div class="col">
+                    <h3>PERSONAL DATE</h3>
+                    <ul>
+                        <li>
+                            <strong>City: </strong>
+                            Pereira
+                        </li>
+                        <li>
+                            <strong>Phone: </strong>
+                            +57 (313) 513-4594
+                        </li>
+                        <li>
+                            <strong>Email: </strong>
+                            samauricio71@gmail.com
+                        </li>
+                        <li>
+                            <strong>Ocupation: </strong>
+                            <span>Developer junior</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- INTERESES -->
+                <div class="col">
+                    <h3>PERSONAL INTERESTS</h3>
+                    <div class="contenedor-intereses">
+                        <div class="intereses">
+                            <i class="fa-brands fa-html5"></i>
+                            HTML5
+                        </div>
+                        <div class="intereses">
+                            <i class="fa-brands fa-css3-alt"></i>
+                            CSS
+                        </div>
+                        <div class="intereses">
+                            <i class="fa-brands fa-php"></i>
+                            PHP
+                        </div>
+                        <div class="intereses">
+                            <i class="fa-brands fa-angular"></i>
+                            ANGULAR
+                        </div>
+                        <div class="intereses">
+                            <i class="fa-brands fa-square-js"></i>
+                            JAVASCRIPT
+                        </div>
+                        <div class="intereses">
+                            <i class="fa-brands fa-python"></i>
+                            PYTHON
+                        </div>
+                        <div class="intereses">
+                            <i class="fa-brands fa-bootstrap"></i>
+                            BOOTSTRAP
+                        </div>
+                        <div class="intereses">
+                            <i class="fa-brands fa-vuejs"></i>
+                            VUE.JS
+                        </div>
+                        <div class="intereses">
+                            <i class="fa-brands fa-react"></i>
+                            REACT
+                        </div>
+                        <div class="intereses">
+                            <i class="fa-brands fa-mdb"></i>
+                            MONGO DB
+                        </div>
+                        <div class="intereses">
+                            <i class="fa-brands fa-github"></i>
+                            GITHUB
+                        </div>
+                        <div class="intereses">
+                            <i class="fa-brands fa-laravel"></i>
+                            LARAVEL
+                        </div>
+                        <div class="intereses">
+                            <i class="fa fa-database"></i>
+                            SQL
+                        </div>
+                        <div class="intereses">
+                            <i class="fa-brands fa-node"></i>
+                            NODE.JS
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="docs/2024_06_HV_mauricio sanchez.pdf" download="HV"><button>
+                    Download CV<i class="fa-solid fa-download"></i>
+                    <span class="overly"></span>
+                </button>
+            </a>
+        </div>
+    </section>
 
-  // Reveal on scroll
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 80);
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(r => io.observe(r));
+    <!-- D I P L O M A S -->
+    <section id="" class="portfolio">
+        <div class="contenido-seccion">
+            <h2>DIPLOMA OF STUDY</h2>
+            <div class="galeria">
+                <div class="proyecto">
+                    <img src="img/certificacion_3.png" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>U T P </p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/programacion_SQL.png" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>ORACLE</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/fundamentos_bases.png" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>ORACLE</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/certificacion_1.png" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>ALURA LATAM ORACLE</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/certificacion_2.png" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>ALURA LATAM ORACLE</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/certificacion_4.jpg" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>ALURA LATAM ORACLE</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/certificacion_6.png" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>ALURA LATAM ORACLE</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/certificacion_5.png" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>ALURA LATAM ORACLE</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/HABILIDAD_DIG.png" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>SENA</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/MAQUETACION_1.png" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>SENA</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/comunicacion.png" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>SENA</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/BBDD_GENERALIDADES.png" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>SENA</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/CONSTRUCCION_MYSQL.png" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>SENA</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/tecnologo.jpg" alt="">
+                    <div class="">
+                        <a href="">
+                            <h3></h3>
+                        </a>
+                        <p>SENA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  // Animate skill bars when visible
-  const skillIo = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.querySelectorAll('.skill-fill').forEach(bar => {
-          bar.style.width = bar.style.getPropertyValue('--w') ||
-            bar.style.cssText.match(/--w:([^;]+)/)?.[1] || '0%';
-        });
-        skillIo.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.3 });
-  document.querySelectorAll('.skills-grid').forEach(s => skillIo.observe(s));
-</script>
+    <!-- S K I L L S -->
+    <section class="skills" id="skills">
+        <div class="contenido-seccion">
+            <h2>SKILLS</h2>
+            <div class="fila">
+                <!--technical skills -->
+                <div class="col">
+                    <h3>Technical Skills</h3>
+                    <div class="skill">
+                        <span>Javascript</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>75%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <span>Html & css</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>89%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <span>Python</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>68%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <span>Mongo DB</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>51%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <span>React</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>70%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <span>Angular</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>65%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <span>Php</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>85%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Professional Skills-->
+                <div class="col">
+                    <h3>Professional Skills</h3>
+                    <div class="skill">
+                        <span>Communication</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>85%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <span>TeamWork</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>95%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <span>Creativity</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>85%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <span>Dedication</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>95%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <span>Leadership</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>91%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <span>Discipline</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>95%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill">
+                        <span>Responsibility</span>
+                        <div class="barra-skill">
+                            <div class="progreso">
+                                <span>96%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- C U R R I C U L U M -->
+    <section id="curriculum" class="curriculum">
+        <div class="contenido-seccion">
+            <h2>CURRICULUM</h2>
+            <div class="fila">
+                <div class="col izquierda">
+                    <h3>Education</h3>
+                    <div class="item izq">
+                        <h4>Database Programming</h4>
+                        <span class="casa">ORACLE ACADEMY</span>
+                        <span class="alcance">I reach</span>
+                        <p>Creation and administration of Oracle databases, application of tools 
+                           such as APEX and debugging of databases.</p>
+                        <div class="conectori">
+                            <div class="circuloi">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item izq">
+                        <h4>Software Developer</h4>
+                        <span class="casa">SENA</span>
+                        <span class="alcance">I reach</span>
+                        <p>Development of skills around the activities inherent in the process of creating computer
+                            applications, in accordance with the functional and technical requirements for a business
+                            solution, establishing individual and team working methods</p>
+                        <div class="conectori">
+                            <div class="circuloi">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item izq">
+                        <h4>Diploma in Web Application Development</h4>
+                        <span class="casa">Misión TIC2022 Technological University of Pereira</span>
+                        <span class="alcance">I reach</span>
+                        <p>Program based on learning paths designed to enhance national digital talent and turn Colombia
+                            into a benchmark country for digital transformation.</p>
+                        <div class="conectori">
+                            <div class="circuloi">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item izq">
+                        <h4>Diploma in Advanced Excel</h4>
+                        <span class="casa">Comfamiliar Risaralda</span>
+                        <span class="alcance">I reach</span>
+                        <p>Knowing, arranging and creating solutions in Excel, knowing the different tools that this
+                            application offers us, such as pivot tables, dashboards, charts, functions, formulas, other.
+                        </p>
+                        <div class="conectori">
+                            <div class="circuloi">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col derecha">
+                    <h3>Work Experience</h3>
+                    <div class="item der">
+                        <h4>Developer</h4>
+                        <span class="casa">Cerok</span>
+                        <span class="alcance">I reach</span>
+                        <p>Create reports, queries and formats according to the client's requirements, 
+                            using MVC methodology, php language, javascript, html, css, simpony frameworks 
+                            and SQL databases.</p>
+                        <div class="conectord">
+                            <div class="circulod">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item der">
+                        <h4>Freelance Developer</h4>
+                        <span class="casa">Pequeños Picassos</span>
+                        <span class="alcance">I reach</span>
+                        <p>A company dedicated to the entertainment of children, through creativity, such as painting,
+                            drawing and mental concentration skills, assembling puzzles and pieces of assembly play.
+                            there i designed the company's website using html, css, javascript, language.</p>
+                        <div class="conectord">
+                            <div class="circulod">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item der">
+                        <h4>Coordinator</h4>
+                        <span class="casa">Pereira Town Hall</span>
+                        <span class="alcance">I reach</span>
+                        <p>Provide support to the Secretary of Sports and Recreation
+                            (Secretary) of the city of Pereira on administrative activities required
+                            for daily operations of sport venues.</p>
+                        <div class="conectord">
+                            <div class="circulod">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item der">
+                        <h4>Office Manager</h4>
+                        <span class="casa">CSC</span>
+                        <span class="alcance">I reach</span>
+                        <p>Implemented work plans according to company regulations; Oversaw compliance with the
+                            processes and policies of the
+                            company on granting of credits; Visited companies to reach agreements and look for potential
+                            clients.</p>
+                        <div class="conectord">
+                            <div class="circulod">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- P O R T F O L I O -->
+    <section id="portfolio" class="portfolio">
+        <div class="contenido-seccion">
+            <h2>PORTFOLIO</h2>
+            <div class="galeria">
+                <div class="proyecto">
+                    <img src="img/img_1.png" alt="">
+                    <div class="overley">
+                        <a href="https://mauriciosancheza.github.io/pequenosPicassos.github.io/">
+                            <h3>Pequeños Picassos</h3>
+                        </a>
+                        <p>Web Site</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/encriptar_1.jpg" alt="">
+                    <div class="overley">
+                        <a href="https://mauriciosancheza.github.io/Decodificadortexto.github.io/">
+                            <h3>Encriptador</h3>
+                        </a>
+                        <p>Web Site</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/Barberia_1.jpg" alt="">
+                    <div class="overley">
+                        <a href="https://mauriciosancheza.github.io/BarberShop.github.io/">
+                            <h3>BarberShop</h3>
+                        </a>
+                        <p>Web Site</p>
+                    </div>
+                </div>
+
+                <div class="proyecto">
+                    <img src="img/recetario_1.jpg" alt="">
+                    <div class="overley">
+                        <a href="https://mauriciosancheza.github.io/RecetarioALURAONE/">
+                            <h3>Recetario</h3>
+                        </a>
+                        <p>Web Site</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/Escenario_1.jpg" alt="">
+                    <div class="overley">
+                        <a href="https://mauriciosancheza.github.io/escenariosdeportivos/">
+                            <h3>Escenarios Deportivos</h3>
+                        </a>
+                        <p>Web Site</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/Dietas.jpg" alt="">
+                    <div class="overley">
+                        <a href="https://msanchez.wuaze.com/?i=1">
+                            <h3>Dietas Adicionales-HUSJ</h3>
+                        </a>
+                        <p>Web Site</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- C O N T A C T -->
+    <section id="contact" class="contact">
+        <div class="contenido-seccion">
+            <h2>CONTACT</h2>
+            <div class="fila">
+                <!-- Formulario -->
+                <div class="col">
+                    <input type="text" placeholder="Name">
+                    <input type="text" placeholder="Phone">
+                    <input type="text" placeholder="Email">
+                    <input type="text" placeholder="Subject">
+                    <textarea name="" id="" cols="30" rows="10" placeholder="Mesagge"></textarea>
+                    <button>
+                        Send Mesagge<i class="fa-solid fa-paper-plane"></i>
+                        <span class="overley"></span>
+                    </button>
+                </div>
+                <!-- Mapa -->
+                <div class="col">
+                    <img src="img/map_1.jpg" alt="">
+                    <div class="info">
+                        <ul>
+                            <li>
+                                <i class="fa-solid fa-location-dot"></i>
+                                Pereira, Risaralda
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-phone"></i>
+                                To Call: +57(313) 513 4594
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-envelope"></i>
+                                Email: samauricio71@gmail.com
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- F O O T E R -->
+    <footer>
+        <a href="#inicio" class="arriba">
+            <i class="fa-solid fa-angles-up"></i>
+        </a>
+        <div class="redes">
+            <a href=https://www.facebook.com/mauricio.s.abella target="blank"><i
+                    class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://github.com/MauricioSanchezA" target="blank"><i class="fa-brands fa-github"></i></a>
+            <a href=https://www.linkedin.com/in/mauricio-sanchez-abella-1bbb41278?jobid=1234&lipi=urn%3Ali%3Apage%3Ad_jobs_easyapply_pdfgenresume%3BBTKnlcJmSoOaM8iNepxUBg%3D%3D&licu=urn%3Ali%3Acontrol%3Ad_jobs_easyapply_pdfgenresume-v02_profile target="blank"><i
+                    class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
+
 </html>
